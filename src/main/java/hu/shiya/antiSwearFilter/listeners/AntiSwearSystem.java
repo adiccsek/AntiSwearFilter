@@ -18,7 +18,6 @@ public class AntiSwearSystem implements Listener {
     }
     @EventHandler
     public void onSwear(AsyncPlayerChatEvent event) {
-        System.out.println("DEBUG1");
         Player player = event.getPlayer();
         List<String> badWords = new ArrayList<>();
         badWords.addAll(instance.getConfig().getStringList("badwords"));
@@ -26,15 +25,17 @@ public class AntiSwearSystem implements Listener {
         onlinePlayers.addAll( Bukkit.getOnlinePlayers());
         String message = event.getMessage();
 
-        if (badWords.contains(message.toLowerCase()) && !player.hasPermission("chat-pass")) {
-            event.setCancelled(true);
-            System.out.println("DEBUG2");
-            player.sendMessage( "You cannot swear on the server!" );
-            onlinePlayers.forEach( (p) -> {
-                if (p.hasPermission("moderator") ){
-                    p.sendMessage( player.getName() + "swore: " + "§c" + message  );
-                }}
-            );
+        for (String badWord : badWords) {
+            if (message.toLowerCase().contains(badWord.toLowerCase())) { // &&!player.hasPermission("chat-pass")
+                event.setCancelled(true);
+                player.sendMessage( "You cannot swear on the server!" );
+                onlinePlayers.forEach( (p) -> {
+                    if (p.hasPermission("moderator") ){
+                        p.sendMessage( player.getName() + "swore: " + "§c" + message  );
+                    }}
+                );
+            }
         }
+
     }
 }

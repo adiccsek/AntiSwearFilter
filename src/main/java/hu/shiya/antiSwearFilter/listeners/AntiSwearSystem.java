@@ -26,7 +26,7 @@ public class AntiSwearSystem implements Listener {
         String message = event.getMessage();
 
         for (String badWord : badWords) {
-            if (message.toLowerCase().contains(badWord.toLowerCase())) { // &&!player.hasPermission("chat-pass")
+            if (message.toLowerCase().contains(badWord.toLowerCase()) && !player.hasPermission("chat-pass")) {
                 event.setCancelled(true);
                 player.sendMessage( "You cannot swear on the server!" );
                 onlinePlayers.forEach( (p) -> {
@@ -34,8 +34,8 @@ public class AntiSwearSystem implements Listener {
                         p.sendMessage( player.getName() + "swore: " + "§c" + message  );
                     }}
                 );
+                return;
             }
         }
-
     }
 }
